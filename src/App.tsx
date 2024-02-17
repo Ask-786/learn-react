@@ -1,35 +1,79 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+import Input from "./components/Input";
+import ListItem from "./components/ListItem";
+import { v4 as uuidv4 } from "uuid";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [todos, updateTodos] = useState<
+    {
+      label: string;
+      completed: boolean;
+      id: string;
+    }[]
+  >([]);
+
+  function handleClick(state: boolean, index: number) {
+    const currentTodos = [...todos];
+    currentTodos[index].completed = state;
+    updateTodos(currentTodos);
+  }
+
+  function handleAddTodo(label: string) {
+    const currentTodos = [...todos];
+    currentTodos.push({ label, completed: false, id: uuidv4() });
+    updateTodos(currentTodos);
+  }
+
+  function handleClear() {
+    const currentTodos = [...todos];
+    const confirmation = confirm("Are you sure??");
+    if (!confirmation) return;
+    updateTodos(currentTodos.filter((el) => !el.completed));
+  }
+
+  useEffect(() => {
+    const todos = JSON.parse(localStorage.getItem("todos") ?? "[]");
+    updateTodos(todos);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="h-[100vh] w-full bg-slate-900 text-white flex flex-col justify-center items-center p-5">
+      <div className="flex flex-col gap-3 min-w-96 items-start max-h-full">
+        <Input onSubmit={handleAddTodo} />
+        <div className="h-2"></div>
+        <span className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+          Todos:
+        </span>
+        <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400 h-full overflow-auto w-full">
+          {todos.length
+            ? todos.map((el, i) => {
+                return (
+                  <ListItem
+                    key={el.id}
+                    completed={el.completed}
+                    label={el.label}
+                    onClick={handleClick}
+                    index={i}
+                  />
+                );
+              })
+            : "No todos in the list!!"}
+        </ul>
 
-export default App
+        {Boolean(todos.length) && (
+          <a
+            className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+            onClick={handleClear}
+          >
+            Clear completed?
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
