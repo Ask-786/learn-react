@@ -42,14 +42,14 @@ export default function App() {
   }, [todos]);
 
   return (
-    <div className="h-[100vh] w-full bg-slate-900 text-white flex flex-col justify-center items-center p-5">
-      <div className="flex flex-col gap-3 min-w-96 items-start max-h-full">
+    <div className="h-[100vh] w-full bg-slate-900 text-white flex flex-col justify-center items-center">
+      <div className="flex flex-col gap-3 min-w-96 items-start max-h-full p-5">
         <Input onSubmit={handleAddTodo} />
         <div className="h-2"></div>
         <span className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
           Todos:
         </span>
-        <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400 h-full overflow-auto w-full p-4">
+        <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400 h-full overflow-auto w-full">
           {todos.length
             ? todos.map((el, i) => {
                 return (
