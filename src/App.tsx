@@ -49,7 +49,7 @@ export default function App() {
         <span className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
           Todos:
         </span>
-        <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400 h-full overflow-auto w-full">
+        <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400 h-full overflow-auto w-full p-4">
           {todos.length
             ? todos.map((el, i) => {
                 return (
