@@ -42,7 +42,7 @@ export default function App() {
   }, [todos]);
 
   return (
-    <div className="h-[100vh] w-full bg-slate-900 text-white flex flex-col justify-center items-center">
+    <div className="h-[100vh] w-full bg-slate-900 text-white flex flex-col items-center">
       <div className="flex flex-col gap-3 min-w-96 items-start max-h-full p-5">
         <Input onSubmit={handleAddTodo} />
         <div className="h-2"></div>
