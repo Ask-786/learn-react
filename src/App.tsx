@@ -49,23 +49,31 @@ export default function App() {
         <span className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
           Todos:
         </span>
-        <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400 h-full overflow-auto w-full">
+        <ul className="max-w-md text-gray-500 list-inside dark:text-gray-400 h-full overflow-auto w-full">
           {todos.length
             ? todos.map((el, i) => {
                 return (
-                  <ListItem
+                  <div
                     key={el.id}
-                    completed={el.completed}
-                    label={el.label}
-                    onClick={handleClick}
-                    index={i}
-                  />
+                    className={
+                      i !== todos.length - 1
+                        ? "border-b border-slate-500 p-2"
+                        : "p-2"
+                    }
+                  >
+                    <ListItem
+                      completed={el.completed}
+                      label={el.label}
+                      onClick={handleClick}
+                      index={i}
+                    />
+                  </div>
                 );
               })
             : "No todos in the list!!"}
         </ul>
 
-        {Boolean(todos.length) && (
+        {Boolean(todos.filter((el) => el.completed).length) && (
           <a
             className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
             onClick={handleClear}
