@@ -29,6 +29,17 @@ export default function App() {
     updateTodos(currentTodos);
   }
 
+  function handleEdit(index: number) {
+    const label = prompt("Update todo: ");
+
+    if (!label) return;
+
+    const currentTodos = [...todos];
+    currentTodos[index].label = label;
+
+    updateTodos(currentTodos);
+  }
+
   function handleAddTodo(label: string) {
     const currentTodos = [...todos];
     currentTodos.push({ label, completed: false, id: uuidv4() });
@@ -74,6 +85,7 @@ export default function App() {
                       label={el.label}
                       onClick={handleClick}
                       onDelete={handleDelete}
+                      onEdit={handleEdit}
                       index={i}
                     />
                   </div>
