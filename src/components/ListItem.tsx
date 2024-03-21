@@ -39,7 +39,7 @@ export default function ListItem({
       title={label}
     >
       <div
-        className="flex items-center cursor-pointer w-full max-w-[92%]"
+        className="flex items-center cursor-pointer w-full max-w-[88%]"
         onClick={handleOnClicked}
       >
         <svg
