@@ -30,7 +30,7 @@ export default function App() {
   }
 
   function handleEdit(index: number) {
-    const label = prompt("Update todo: ");
+    const label = prompt("Update todo: ", todos[index].label);
 
     if (!label) return;
 
