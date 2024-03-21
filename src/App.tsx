@@ -56,10 +56,8 @@ export default function App() {
       <div className="flex flex-col gap-3 min-w-96 items-start max-h-full p-5">
         <Input onSubmit={handleAddTodo} />
         <div className="h-2"></div>
-        <span className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-          Todos:
-        </span>
-        <ul className="max-w-md text-gray-500 list-inside dark:text-gray-400 h-full overflow-auto w-full">
+        <span className="mb-2 text-lg font-semibold text-white">Todos:</span>
+        <ul className="max-w-md list-inside text-gray-400 h-full overflow-auto w-full">
           {todos.length
             ? todos.map((el, i) => {
                 return (
@@ -86,7 +84,7 @@ export default function App() {
 
         {Boolean(todos.filter((el) => el.completed).length) && (
           <a
-            className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+            className="font-medium text-blue-500 hover:underline cursor-pointer"
             onClick={handleClear}
           >
             Clear completed?

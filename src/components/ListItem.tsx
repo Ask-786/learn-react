@@ -35,7 +35,7 @@ export default function ListItem({
         onClick={handleOnClicked}
       >
         <svg
-          className={`w-3.5 h-3.5 me-2 ${completed ? "text-green-500 dark:text-green-400" : "text-gray-500 dark:text-gray-400"} flex-shrink-0`}
+          className={`w-3.5 h-3.5 me-2 ${completed ? "text-green-400" : "text-gray-400"} flex-shrink-0`}
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -52,7 +52,7 @@ export default function ListItem({
         className="p-1 flex items-center justify-center cursor-pointer"
       >
         <svg
-          className="w-3.5 h-3.5 text-red-500 dark:text-red-400 flex-shrink-0"
+          className="w-3.5 h-3.5 text-red-400 flex-shrink-0"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
           viewBox="0 0 448 512"
