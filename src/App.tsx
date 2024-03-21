@@ -19,6 +19,16 @@ export default function App() {
     updateTodos(currentTodos);
   }
 
+  function handleDelete(state: boolean, index: number) {
+    const currentTodos = [...todos];
+    if (!state) {
+      const result = confirm("This todo is not completed yet. are you sure??");
+      if (!result) return;
+    }
+    currentTodos.splice(index, 1);
+    updateTodos(currentTodos);
+  }
+
   function handleAddTodo(label: string) {
     const currentTodos = [...todos];
     currentTodos.push({ label, completed: false, id: uuidv4() });
@@ -65,6 +75,7 @@ export default function App() {
                       completed={el.completed}
                       label={el.label}
                       onClick={handleClick}
+                      onDelete={handleDelete}
                       index={i}
                     />
                   </div>
