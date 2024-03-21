@@ -62,6 +62,26 @@ export default function App() {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
+  const todosList = todos.map((el, i) => {
+    return (
+      <div
+        key={el.id}
+        className={
+          i !== todos.length - 1 ? "border-b border-slate-500 p-2" : "p-2"
+        }
+      >
+        <ListItem
+          completed={el.completed}
+          label={el.label}
+          onClick={handleClick}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+          index={i}
+        />
+      </div>
+    );
+  });
+
   return (
     <div className="h-[100vh] w-full bg-slate-900 text-white flex flex-col items-center">
       <div className="flex flex-col gap-3 min-w-96 items-start max-h-full p-5">
@@ -69,29 +89,8 @@ export default function App() {
         <div className="h-2"></div>
         <span className="mb-2 text-lg font-semibold text-white">Todos:</span>
         <ul className="max-w-md list-inside text-gray-400 h-full overflow-auto w-full">
-          {todos.length
-            ? todos.map((el, i) => {
-                return (
-                  <div
-                    key={el.id}
-                    className={
-                      i !== todos.length - 1
-                        ? "border-b border-slate-500 p-2"
-                        : "p-2"
-                    }
-                  >
-                    <ListItem
-                      completed={el.completed}
-                      label={el.label}
-                      onClick={handleClick}
-                      onDelete={handleDelete}
-                      onEdit={handleEdit}
-                      index={i}
-                    />
-                  </div>
-                );
-              })
-            : "No todos in the list!!"}
+          {Boolean(todos.length) && todosList}
+          {Boolean(!todos.length) && "No todos in the list!!"}
         </ul>
 
         {Boolean(todos.filter((el) => el.completed).length) && (
