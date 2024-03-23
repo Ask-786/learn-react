@@ -10,7 +10,7 @@ export default function Input({ onSubmit }: Props) {
   function handleSubmission(event: FormEvent) {
     event.preventDefault();
     if (!inputRef.current?.value) return;
-    onSubmit(inputRef.current?.value ?? "");
+    onSubmit(inputRef.current.value);
     inputRef.current.value = "";
   }
 

@@ -13,29 +13,37 @@ export default function App() {
     }[]
   >([]);
 
-  function handleClick(state: boolean, index: number) {
+  function handleClick(state: boolean, id: string) {
     const currentTodos = [...todos];
-    currentTodos[index].completed = state;
+    const todo = currentTodos.find((el) => el.id === id);
+
+    if (!todo) return;
+
+    todo.completed = state;
     updateTodos(currentTodos);
   }
 
-  function handleDelete(state: boolean, index: number) {
+  function handleDelete(state: boolean, id: string) {
+    if (!state && !confirm("This todo is not completed yet. are you sure??"))
+      return;
+
     const currentTodos = [...todos];
-    if (!state) {
-      const result = confirm("This todo is not completed yet. are you sure??");
-      if (!result) return;
-    }
+    const index = currentTodos.findIndex((el) => el.id === id);
+    if (index === -1) return;
+
     currentTodos.splice(index, 1);
     updateTodos(currentTodos);
   }
 
-  function handleEdit(index: number) {
-    const label = prompt("Update todo: ", todos[index].label);
+  function handleEdit(id: string) {
+    const currentTodos = [...todos];
+    const todo = currentTodos.find((el) => el.id === id);
+    if (!todo) return;
 
+    const label = prompt("Update todo: ", todo.label);
     if (!label) return;
 
-    const currentTodos = [...todos];
-    currentTodos[index].label = label;
+    todo.label = label;
 
     updateTodos(currentTodos);
   }
@@ -71,12 +79,10 @@ export default function App() {
         }
       >
         <ListItem
-          completed={el.completed}
-          label={el.label}
+          todo={el}
           onClick={handleClick}
           onDelete={handleDelete}
           onEdit={handleEdit}
-          index={i}
         />
       </div>
     );
