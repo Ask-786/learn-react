@@ -15,7 +15,7 @@ export default function Input({ onSubmit }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmission} className="max-w-md mx-auto w-full">
+    <form onSubmit={handleSubmission} className="mx-auto w-full">
       <label className="mb-2 text-sm font-medium sr-only text-white">
         Enter Todo
       </label>
