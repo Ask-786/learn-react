@@ -1,15 +1,59 @@
+import { useRef } from "react";
+import { useDrag, useDrop } from "react-dnd";
+
 interface Props {
   todo: {
     label: string;
     completed: boolean;
     id: string;
   };
+  index: number;
   onClick: (state: boolean, id: string) => void;
   onDelete: (state: boolean, id: string) => void;
   onEdit: (id: string) => void;
+  moveCard: (id: string, to: number) => void;
 }
 
-export default function ListItem({ todo, onClick, onDelete, onEdit }: Props) {
+export default function ListItem({
+  todo,
+  index,
+  onClick,
+  onDelete,
+  onEdit,
+  moveCard,
+}: Props) {
+  const itemRef = useRef<HTMLLIElement | null>(null);
+  const [_, drag] = useDrag(
+    () => ({
+      type: "card",
+      item: { id: todo.id, originalIndex: index },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+      end: (item, monitor) => {
+        const { id: droppedId, originalIndex } = item;
+        const didDrop = monitor.didDrop();
+
+        if (!didDrop) {
+          moveCard(droppedId, originalIndex);
+        }
+      },
+    }),
+    [todo.id, index, moveCard],
+  );
+
+  const [, drop] = useDrop(
+    () => ({
+      accept: "card",
+      hover({ id: draggedId }: { id: string }) {
+        if (draggedId !== todo.id) {
+          moveCard(draggedId, index);
+        }
+      },
+    }),
+    [index, moveCard],
+  );
+
   function handleOnDelete() {
     onDelete(todo.completed, todo.id);
   }
@@ -24,11 +68,12 @@ export default function ListItem({ todo, onClick, onDelete, onEdit }: Props) {
 
   return (
     <li
+      ref={itemRef}
       className="flex justify-between items-center gap-2 select-none"
       title={todo.label}
     >
       <div
-        className="flex items-center cursor-pointer w-full max-w-[88%]"
+        className="flex items-center cursor-pointer w-full max-w-[82%]"
         onClick={handleOnClicked}
       >
         <svg
@@ -72,7 +117,21 @@ export default function ListItem({ todo, onClick, onDelete, onEdit }: Props) {
           <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
         </svg>
       </div>
-
+      <div
+        onClick={handleOnDelete}
+        title="Delete Todo"
+        className="p-0.5 flex items-center justify-center cursor-move"
+        ref={() => drag(drop(itemRef))}
+      >
+        <svg
+          className="w-3.5 h-3.5 text-gray-400 hover:text-red-400 flex-shrink-0"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 448 512"
+        >
+          <path d="M0 72C0 49.9 17.9 32 40 32H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V72zM0 232c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V232zM128 392v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40zM160 72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V72zM288 232v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM160 392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V392zM448 72v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM320 232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V232zM448 392v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40z" />
+        </svg>
+      </div>
     </li>
   );
 }

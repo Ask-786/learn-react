@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import update from "immutability-helper";
 import "./App.css";
 import Input from "./components/Input";
 import ListItem from "./components/ListItem";
 import { v4 as uuidv4 } from "uuid";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 export default function App() {
   const [todos, updateTodos] = useState<
@@ -70,6 +73,32 @@ export default function App() {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
+  const findCard = useCallback(
+    (id: string) => {
+      const card = todos.filter((c) => `${c.id}` === id)[0];
+      return {
+        card,
+        index: todos.indexOf(card),
+      };
+    },
+    [todos],
+  );
+
+  const moveCard = useCallback(
+    (id: string, atIndex: number) => {
+      const { card, index } = findCard(id);
+      updateTodos(
+        update(todos, {
+          $splice: [
+            [index, 1],
+            [atIndex, 0, card],
+          ],
+        }),
+      );
+    },
+    [findCard, todos, updateTodos],
+  );
+
   const todosList = todos.map((el, i) => {
     return (
       <div
@@ -80,34 +109,38 @@ export default function App() {
       >
         <ListItem
           todo={el}
+          index={i}
           onClick={handleClick}
           onDelete={handleDelete}
           onEdit={handleEdit}
+          moveCard={moveCard}
         />
       </div>
     );
   });
 
   return (
-    <div className="h-[100vh] w-full bg-slate-900 text-white flex flex-col items-center">
-      <div className="flex flex-col gap-3 min-w-96 items-start max-h-full p-5">
-        <Input onSubmit={handleAddTodo} />
-        <div className="h-2"></div>
-        <span className="mb-2 text-lg font-semibold text-white">Todos:</span>
-        <ul className="max-w-md list-inside text-gray-400 h-full overflow-auto w-full">
-          {Boolean(todos.length) && todosList}
-          {Boolean(!todos.length) && "No todos in the list!!"}
-        </ul>
+    <DndProvider backend={HTML5Backend}>
+      <div className="h-[100vh] w-full bg-slate-900 text-white flex flex-col items-center">
+        <div className="flex flex-col gap-3 min-w-96 items-start max-h-full p-5">
+          <Input onSubmit={handleAddTodo} />
+          <div className="h-2"></div>
+          <span className="mb-2 text-lg font-semibold text-white">Todos:</span>
+          <ul className="max-w-md list-inside text-gray-400 h-full overflow-auto w-full">
+            {Boolean(todos.length) && todosList}
+            {Boolean(!todos.length) && "No todos in the list!!"}
+          </ul>
 
-        {Boolean(todos.filter((el) => el.completed).length) && (
-          <a
-            className="font-medium text-blue-500 hover:underline cursor-pointer"
-            onClick={handleClear}
-          >
-            Clear completed?
-          </a>
-        )}
+          {Boolean(todos.filter((el) => el.completed).length) && (
+            <a
+              className="font-medium text-blue-500 hover:underline cursor-pointer"
+              onClick={handleClear}
+            >
+              Clear completed?
+            </a>
+          )}
+        </div>
       </div>
-    </div>
+    </DndProvider>
   );
 }
