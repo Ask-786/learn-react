@@ -122,11 +122,13 @@ export default function App() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="h-[100vh] w-full bg-slate-900 text-white flex flex-col items-center">
-        <div className="flex flex-col gap-3 min-w-96 items-start max-h-full p-5">
-          <Input onSubmit={handleAddTodo} />
+        <div className="flex flex-col gap-3 w-[28rem] items-start max-h-full py-5 pl-5 pr-3">
+          <div className="w-full pr-2">
+            <Input onSubmit={handleAddTodo} />
+          </div>
           <div className="h-2"></div>
           <span className="mb-2 text-lg font-semibold text-white">Todos:</span>
-          <ul className="max-w-md list-inside text-gray-400 h-full overflow-auto w-full">
+          <ul className="max-w-md list-inside text-gray-400 h-full overflow-auto w-full pr-1">
             {Boolean(todos.length) && todosList}
             {Boolean(!todos.length) && "No todos in the list!!"}
           </ul>

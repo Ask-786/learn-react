@@ -84,7 +84,7 @@ export default function ListItem({
       title={todo.label}
     >
       <div
-        className={`flex items-center cursor-pointer w-full ${isControlShown ? "max-w-[82%]" : ""}`}
+        className={`flex items-center cursor-pointer w-full ${isControlShown ? "max-w-[81%]" : ""}`}
         onClick={handleOnClicked}
       >
         <svg
